@@ -1,10 +1,10 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const schedule = require("./getNextEpisode.js");
-const config = require("./files/config.json");
 
-const botToken = process.env.botToken || config.token;
-const commandPrefix = process.env.commandPrefix || config.prefix;
+const botToken = process.env.botToken || require("./files/config.json").token;
+const commandPrefix =
+  process.env.commandPrefix || require("./files/config.json").prefix;
 
 client.on("ready", () => {
   console.log(
