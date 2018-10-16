@@ -3,6 +3,9 @@ const client = new Discord.Client();
 const schedule = require("./getNextEpisode.js");
 const config = require("./files/config.json");
 
+const botToken = process.env.botToken || config.token;
+const commandPrefix = process.env.commandPrefix || config.prefix;
+
 client.on("ready", () => {
   console.log(
     `Bot has started, with ${client.users.size} users, in ${
@@ -29,10 +32,10 @@ client.on("guildDelete", guild => {
 client.on("message", async message => {
   if (message.author.bot) return;
 
-  if (message.content.indexOf(config.prefix) !== 0) return;
+  if (message.content.indexOf(commandPrefix) !== 0) return;
 
   const args = message.content
-    .slice(config.prefix.length)
+    .slice(commandPrefix.length)
     .trim()
     .split(/ +/g);
   const command = args.shift().toLowerCase();
@@ -78,4 +81,4 @@ client.on("message", async message => {
   }
 });
 
-client.login(config.token);
+client.login(botToken);
