@@ -1,0 +1,22 @@
+{
+  "name": "rikimaru-discord-bot",
+  "version": "1.0.0",
+  "description": "A discord bot that checks next episode schedule/countdown for anime using `-when` command.",
+  "main": "index.js",
+  "dependencies": {
+    "discord.js": "^11.4.2",
+    "endeavor": "^2.3.0",
+    "node-schedule": "^1.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js",
+    "nodemon": "nodemon src/index.js"
+  },
+  "keywords": [
+    "rikimaru"
+  ],
+  "author": "xamantra",
+  "license": "ISC"
+}
