@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const schedule = require("./getNextEpisode.js");
+const canMessage = require("./channels.js");
 
 const config = "./files/config.json";
 const botToken = process.env.botToken || require(config).token;
@@ -36,7 +37,11 @@ client.on("guildDelete", guild => {
 client.on("message", async message => {
   if (message.author.bot) return;
 
-  if (message.content.indexOf(commandPrefix) !== 0) return;
+  const isCommand = message.content.indexOf(commandPrefix) === 0;
+
+  const hasPermission = message.member.roles.some(r =>
+    ["Ōnā", "Botto"].includes(r.name)
+  );
 
   const args = message.content
     .slice(commandPrefix.length)
@@ -45,44 +50,47 @@ client.on("message", async message => {
   const command = args.shift().toLowerCase();
   const anime = args.join(" ");
 
-  switch (command) {
-    case "when":
-      if (anime.trim() === "" || anime.length === 0) {
-        message.delete();
-      } else {
-        schedule(anime, message);
-      }
-      break;
-    case "dmwhen":
-      if (anime.trim() === "" || anime.length === 0) {
-        message.delete();
-      } else {
-        schedule(anime, message, true);
-      }
-      break;
-    case "prune":
-      if (message.member.roles.some(r => ["Majesty", "Bot"].includes(r.name))) {
-        async function clear() {
+  if (canMessage(message, isCommand, hasPermission) === true) {
+    console.log(command);
+    switch (command) {
+      case "when":
+        if (anime.trim() === "" || anime.length === 0) {
           message.delete();
-          const fetched = await message.channel.fetchMessages({ limit: 100 });
-          message.channel.bulkDelete(fetched);
+        } else {
+          schedule(anime, message);
         }
-        clear();
-      }
-      message.delete();
-      break;
-    case "ping":
-      const m = await message.channel.send("Ping?");
-      m.edit(
-        `Pong! Latency is ${m.createdTimestamp -
-          message.createdTimestamp}ms. API Latency is ${Math.round(
-          client.ping
-        )}ms`
-      );
-      break;
-    default:
-      message.delete();
-      break;
+        break;
+      case "dmwhen":
+        if (anime.trim() === "" || anime.length === 0) {
+          message.delete();
+        } else {
+          schedule(anime, message, true);
+        }
+        break;
+      case "prune":
+        if (hasPermission) {
+          async function clear() {
+            message.delete();
+            const fetched = await message.channel.fetchMessages({ limit: 100 });
+            message.channel.bulkDelete(fetched);
+          }
+          clear();
+        }
+        message.delete();
+        break;
+      case "ping":
+        const m = await message.channel.send("Ping?");
+        m.edit(
+          `Pong! Latency is ${m.createdTimestamp -
+            message.createdTimestamp}ms. API Latency is ${Math.round(
+            client.ping
+          )}ms`
+        );
+        break;
+      default:
+        message.delete();
+        break;
+    }
   }
 });
 

@@ -1,18 +1,22 @@
 [
   {
     "name": "testing",
-    "id": 501791132393406485
+    "id": "501791132393406485",
+    "rules": ["noRules"]
   },
   {
     "name": "suggestions",
-    "id": 501781354183262219
+    "id": "501781354183262219",
+    "rules": ["noCommands"]
   },
   {
     "name": "anime",
-    "id": 501791729817747456
+    "id": "501791729817747456",
+    "rules": ["noCommands"]
   },
   {
     "name": "bot",
-    "id": 501795336952741888
+    "id": "501795336952741888",
+    "rules": ["commandsOnly"]
   }
 ]
