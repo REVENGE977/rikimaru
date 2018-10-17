@@ -17,7 +17,7 @@ client.on("ready", () => {
       client.channels.size
     } channels of ${client.guilds.size} guilds.`
   );
-  client.user.setActivity(`Serving ${client.guilds.size} servers`);
+  client.user.setActivity(`as a Bot`);
 });
 
 client.on("guildCreate", guild => {
