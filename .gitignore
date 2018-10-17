@@ -75,4 +75,3 @@ typings/
 # My Files
 files/*.txt
 src/files/config.json
-Procfile
