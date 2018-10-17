@@ -114,7 +114,6 @@ function getNextEpisode(anime, message, dm = false) {
   };
 
   callAnilist();
-  message.delete();
 }
 
 module.exports = getNextEpisode;
