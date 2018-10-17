@@ -40,44 +40,46 @@ client.on("message", async message => {
     .split(/ +/g);
   const command = args.shift().toLowerCase();
 
-  if (command === "when") {
-    const anime = args.join(" ");
-    if (anime.trim() === "" || anime.length === 0) {
-      message.delete();
-    } else {
-      schedule(anime, message);
-    }
-  }
-
-  if (command === "dmwhen") {
-    const anime = args.join(" ");
-    if (anime.trim() === "" || anime.length === 0) {
-      message.delete();
-    } else {
-      schedule(anime, message, true);
-    }
-  }
-
-  if (command === "prune") {
-    if (message.member.roles.some(r => ["Majesty", "Bot"].includes(r.name))) {
-      async function clear() {
+  switch (command) {
+    case "when":
+      const anime = args.join(" ");
+      if (anime.trim() === "" || anime.length === 0) {
         message.delete();
-        const fetched = await message.channel.fetchMessages({ limit: 100 });
-        message.channel.bulkDelete(fetched);
+      } else {
+        schedule(anime, message);
       }
-      clear();
-    }
-    message.delete();
-  }
-
-  if (command === "ping") {
-    const m = await message.channel.send("Ping?");
-    m.edit(
-      `Pong! Latency is ${m.createdTimestamp -
-        message.createdTimestamp}ms. API Latency is ${Math.round(
-        client.ping
-      )}ms`
-    );
+      break;
+    case "dmwhen":
+      const anime = args.join(" ");
+      if (anime.trim() === "" || anime.length === 0) {
+        message.delete();
+      } else {
+        schedule(anime, message, true);
+      }
+      break;
+    case "prune":
+      if (message.member.roles.some(r => ["Majesty", "Bot"].includes(r.name))) {
+        async function clear() {
+          message.delete();
+          const fetched = await message.channel.fetchMessages({ limit: 100 });
+          message.channel.bulkDelete(fetched);
+        }
+        clear();
+      }
+      message.delete();
+      break;
+    case "ping":
+      const m = await message.channel.send("Ping?");
+      m.edit(
+        `Pong! Latency is ${m.createdTimestamp -
+          message.createdTimestamp}ms. API Latency is ${Math.round(
+          client.ping
+        )}ms`
+      );
+      break;
+    default:
+      message.delete();
+      break;
   }
 });
 
