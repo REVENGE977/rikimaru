@@ -73,5 +73,6 @@ typings/
 .serverless
 
 # My Files
-files/
+files/*.txt
+files/config.json
 Procfile
