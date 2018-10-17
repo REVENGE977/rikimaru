@@ -74,5 +74,5 @@ typings/
 
 # My Files
 files/*.txt
-config.json
+src/files/config.json
 Procfile
