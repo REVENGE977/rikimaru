@@ -92,13 +92,15 @@ client.on("message", async message => {
         );
         break;
       default:
-        message.reply(
-          `
+        if (isCommand) {
+          message.reply(
+            `
           That was an unknown command, here are the commands available:
           ***-when anime name or keyword here***
           ***-dmwhen***  - similar to ***-when*** but it dm you with the schedule
           ***-ping***  - just check your ping and the bot.`
-        );
+          );
+        }
         break;
     }
   }
