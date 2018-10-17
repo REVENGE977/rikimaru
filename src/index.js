@@ -6,6 +6,10 @@ const config = "./files/config.json";
 const botToken = process.env.botToken || require(config).token;
 const commandPrefix = process.env.commandPrefix || require(config).prefix;
 
+const openshift = require("openshift-uptimer");
+openshift.log(true);
+openshift.auto_configure();
+
 client.on("ready", () => {
   console.log(
     `Bot has started, with ${client.users.size} users, in ${
