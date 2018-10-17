@@ -39,10 +39,10 @@ client.on("message", async message => {
     .trim()
     .split(/ +/g);
   const command = args.shift().toLowerCase();
+  const anime = args.join(" ");
 
   switch (command) {
     case "when":
-      const anime = args.join(" ");
       if (anime.trim() === "" || anime.length === 0) {
         message.delete();
       } else {
@@ -50,7 +50,6 @@ client.on("message", async message => {
       }
       break;
     case "dmwhen":
-      const anime = args.join(" ");
       if (anime.trim() === "" || anime.length === 0) {
         message.delete();
       } else {

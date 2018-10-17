@@ -2,7 +2,7 @@
   "name": "rikimaru-discord-bot",
   "version": "1.0.0",
   "description": "A discord bot that checks next episode schedule/countdown for anime using `-when` command.",
-  "main": "index.js",
+  "main": "src/index.js",
   "dependencies": {
     "discord.js": "^11.4.2",
     "endeavor": "^2.3.0",
