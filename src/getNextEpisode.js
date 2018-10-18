@@ -169,7 +169,7 @@ function getNextEpisode(anime, message, dm = false) {
                 name: `*Not Yet Aired*`,
                 value: `Will start airing in approximately **${
                   element.AnimeCountdown
-                }**`
+                }**\n Last update: *${element.UpdatedAt}*`
               }
             ]
           }
@@ -187,7 +187,9 @@ function getNextEpisode(anime, message, dm = false) {
             fields: [
               {
                 name: `*Not Yet Aired*`,
-                value: `The release date is **currently unknown.**`
+                value: `The release date is **currently unknown.**\n Last update: *${
+                  element.UpdatedAt
+                }*`
               }
             ]
           }
