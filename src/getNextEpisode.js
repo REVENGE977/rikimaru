@@ -6,6 +6,9 @@ function getNextEpisode(anime, message, dm = false) {
   const query = `query ($id: Int, $page: Int, $perPage: Int, $search: String, $type: MediaType) {
     Page (page: $page, perPage: $perPage) {
       media (id: $id, search: $search, type: $type) {
+        coverImage {
+          large
+        }
         id
         idMal
         title {
@@ -49,7 +52,6 @@ function getNextEpisode(anime, message, dm = false) {
     var unreleasedEntries = [];
     var completedEntries = [];
     result.data.Page.media.forEach(element => {
-      console.log(element);
       var _anime = element.title.romaji.toString();
       if (element.title.english !== null) {
         _anime = element.title.english.toString();
@@ -88,7 +90,8 @@ function getNextEpisode(anime, message, dm = false) {
           CurrentEpisode: _episode,
           EndDate: null,
           StartDate: _startDate,
-          UpdatedAt: moment(_updatedAt).fromNow()
+          UpdatedAt: moment(_updatedAt).fromNow(),
+          Thumbnail: element.coverImage.large
         });
       } else if (
         element.status === "NOT_YET_RELEASED" &&
@@ -142,6 +145,9 @@ function getNextEpisode(anime, message, dm = false) {
         var responseMessage = {
           embed: {
             color: 16408534,
+            thumbnail: {
+              url: element.Thumbnail,
+            },
             title: `***${element.AnimeName}***`,
             url: `https://myanimelist.net/anime/${element.MalId}/`,
             fields: [
@@ -216,10 +222,14 @@ function getNextEpisode(anime, message, dm = false) {
         };
         sendMessage(responseMessage);
       } else {
+        let resultString = 'Result';
+        if (completedEntries.length != 1) {
+         resultString = 'Results'
+        }
         var responseMessage = {
           embed: {
             color: 11652146,
-            title: `Result for keyword ***${anime}***   .`,
+            title: `${resultString} for keyword ***${anime}***:`,
             fields: [
               {
                 name: `*${completedEntries.length} Anime*`,
