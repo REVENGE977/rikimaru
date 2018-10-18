@@ -58,18 +58,18 @@ client.on("message", async message => {
           message.reply(
             "The command was missing a parameter, the correct usage is `-when anime name or keyword here`"
           );
-        } else {
-          schedule(anime, message);
+          return;
         }
+        schedule(anime, message);
         break;
       case "dmwhen":
         if (anime.trim() === "" || anime.length === 0) {
           message.reply(
             "The command was missing a parameter, the correct usage is `-dmwhen anime name or keyword here`"
           );
-        } else {
-          schedule(anime, message, true);
+          return;
         }
+        schedule(anime, message, true);
         break;
       case "prune":
         if (hasPermission) {

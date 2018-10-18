@@ -1,6 +1,6 @@
-var endeavor = require("endeavor");
-var countdown = require("./countdown.js");
-var moment = require("moment");
+const endeavor = require("endeavor");
+const countdown = require("./countdown.js");
+const moment = require("moment");
 
 function getNextEpisode(anime, message, dm = false) {
   const query = `query ($id: Int, $page: Int, $perPage: Int, $search: String, $type: MediaType) {
@@ -44,27 +44,26 @@ function getNextEpisode(anime, message, dm = false) {
   const callAnilist = async () => {
     const result = await endeavor.queryAnilist({ query, variables });
 
-    var ongoingEntries = [];
-    var unknownUnreleasedEntries = [];
-    var unreleasedEntries = [];
-    var completedEntries = [];
+    const ongoingEntries = [];
+    const unknownUnreleasedEntries = [];
+    const unreleasedEntries = [];
+    const completedEntries = [];
     result.data.Page.media.forEach(element => {
       console.log(element);
-      var _anime = element.title.romaji.toString();
-      if (element.title.english !== null) {
-        _anime = element.title.english.toString();
-      }
-      var _time = "Unknown";
-      var _episode = -1;
-      var _updatedAt = moment.unix(element.updatedAt);
+      let _anime = getTitle(element.title);
+      let _time = "Unknown";
+      let _episode = -1;
+      let _endDate
+      let _startDate
+      const _updatedAt = moment.unix(element.updatedAt);
       if (element.status === "FINISHED") {
         try {
-          var _endDate = moment(
+          _endDate = moment(
             `${element.endDate.year}-${element.endDate.month}-${
               element.endDate.day
             }`
           ).format("YYYY MMM D");
-          var _startDate = moment(
+          _startDate = moment(
             `${element.startDate.year}-${element.startDate.month}-${
               element.startDate.day
             }`
@@ -90,7 +89,9 @@ function getNextEpisode(anime, message, dm = false) {
           StartDate: _startDate,
           UpdatedAt: moment(_updatedAt).fromNow()
         });
-      } else if (
+        return;
+      }
+      if (
         element.status === "NOT_YET_RELEASED" &&
         element.nextAiringEpisode !== null
       ) {
@@ -103,7 +104,9 @@ function getNextEpisode(anime, message, dm = false) {
           StartDate: null,
           UpdatedAt: moment(_updatedAt).fromNow()
         });
-      } else if (
+        return;
+      } 
+      if (
         element.status === "NOT_YET_RELEASED" &&
         element.nextAiringEpisode === null
       ) {
@@ -116,7 +119,9 @@ function getNextEpisode(anime, message, dm = false) {
           StartDate: null,
           UpdatedAt: moment(_updatedAt).fromNow()
         });
-      } else if (
+        return;
+      }
+      if (
         element.status === "FINISHED" &&
         (element.episodes !== null || element !== element.nextAiringEpisode)
       ) {
@@ -139,7 +144,7 @@ function getNextEpisode(anime, message, dm = false) {
     if (ongoingEntries.length > 0) {
       for (let i = 0; i < ongoingEntries.length; i++) {
         const element = ongoingEntries[i];
-        var responseMessage = {
+        const responseMessage = {
           embed: {
             color: 16408534,
             title: `***${element.AnimeName}***`,
@@ -156,10 +161,12 @@ function getNextEpisode(anime, message, dm = false) {
         };
         sendMessage(responseMessage);
       }
-    } else if (unreleasedEntries.length > 0) {
+      return;
+    } 
+    if (unreleasedEntries.length > 0) {
       for (let i = 0; i < unreleasedEntries.length; i++) {
         const element = unreleasedEntries[i];
-        var responseMessage = {
+        const responseMessage = {
           embed: {
             color: 8646732,
             title: `***${element.AnimeName}***`,
@@ -176,10 +183,12 @@ function getNextEpisode(anime, message, dm = false) {
         };
         sendMessage(responseMessage);
       }
-    } else if (unknownUnreleasedEntries.length > 0) {
+      return;
+    } 
+    if (unknownUnreleasedEntries.length > 0) {
       for (let i = 0; i < unknownUnreleasedEntries.length; i++) {
         const element = unknownUnreleasedEntries[i];
-        var responseMessage = {
+        const responseMessage = {
           embed: {
             color: 6513633,
             title: `***${element.AnimeName}***`,
@@ -196,10 +205,12 @@ function getNextEpisode(anime, message, dm = false) {
         };
         sendMessage(responseMessage);
       }
-    } else if (completedEntries.length > 0) {
+      return;
+    } 
+    if (completedEntries.length > 0) {
       if (completedEntries.length === 1) {
-        var element = completedEntries[0];
-        var responseMessage = {
+        const element = completedEntries[0];
+        const responseMessage = {
           embed: {
             color: 11652146,
             title: `***${element.AnimeName}***   `,
@@ -215,28 +226,35 @@ function getNextEpisode(anime, message, dm = false) {
           }
         };
         sendMessage(responseMessage);
-      } else {
-        var responseMessage = {
-          embed: {
-            color: 11652146,
-            title: `Result for keyword ***${anime}***   .`,
-            fields: [
-              {
-                name: `*${completedEntries.length} Anime*`,
-                value: `All of them is already completed.`
-              }
-            ]
-          }
-        };
-        sendMessage(responseMessage);
+        return;
       }
-    } else {
-      var responseMessage = `Go me nasai! I didn't find "***${anime}***". Try checking your spelling or enter a different keyword.`;
+      const responseMessage = {
+        embed: {
+          color: 11652146,
+          title: `Result for keyword ***${anime}***   .`,
+          fields: [
+            {
+              name: `*${completedEntries.length} Anime*`,
+              value: `All of them is already completed.`
+            }
+          ]
+        }
+      };
       sendMessage(responseMessage);
+      return;
     }
+    const responseMessage = `Go me nasai! I didn't find "***${anime}***". Try checking your spelling or enter a different keyword.`;
+    sendMessage(responseMessage);
   };
 
   callAnilist();
+
+  function getTitle(title) {
+    if (title.english !== null) {
+      return title.english.toString();
+    }
+    return title.romaji.toString();
+  }
 }
 
 module.exports = getNextEpisode;
