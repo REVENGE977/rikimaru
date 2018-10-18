@@ -52,6 +52,7 @@ function getNextEpisode(anime, message, dm = false) {
     var unreleasedEntries = [];
     var completedEntries = [];
     result.data.Page.media.forEach(element => {
+      console.log(element);
       var _anime = element.title.romaji.toString();
       if (element.title.english !== null) {
         _anime = element.title.english.toString();
@@ -74,6 +75,11 @@ function getNextEpisode(anime, message, dm = false) {
         } catch (error) {
           console.log("...");
         }
+      }
+      if (element.status === "NOT_YET_RELEASED") {
+        var _startDate = moment(
+          `${element.startDate.year}-${element.startDate.month}`
+        ).format("YYYY MMMM");
       }
       if (element.nextAiringEpisode !== null) {
         _time = element.nextAiringEpisode.timeUntilAiring;
@@ -117,7 +123,7 @@ function getNextEpisode(anime, message, dm = false) {
           AnimeCountdown: null,
           CurrentEpisode: null,
           EndDate: null,
-          StartDate: null,
+          StartDate: _startDate,
           UpdatedAt: moment(_updatedAt).fromNow(),
           Thumbnail: element.coverImage.large
         });
@@ -202,9 +208,9 @@ function getNextEpisode(anime, message, dm = false) {
             fields: [
               {
                 name: `*Not Yet Aired*`,
-                value: `The release date is **currently unknown.**\n Last update: *${
-                  element.UpdatedAt
-                }*`
+                value: `The release date is **${
+                  element.StartDate
+                }**\n Last update: *${element.UpdatedAt}*`
               }
             ]
           }
