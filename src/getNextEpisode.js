@@ -6,6 +6,9 @@ function getNextEpisode(anime, message, dm = false) {
   const query = `query ($id: Int, $page: Int, $perPage: Int, $search: String, $type: MediaType) {
     Page (page: $page, perPage: $perPage) {
       media (id: $id, search: $search, type: $type) {
+        coverImage {
+          large
+        }
         id
         idMal
         title {
@@ -87,7 +90,8 @@ function getNextEpisode(anime, message, dm = false) {
           CurrentEpisode: _episode,
           EndDate: null,
           StartDate: _startDate,
-          UpdatedAt: moment(_updatedAt).fromNow()
+          UpdatedAt: moment(_updatedAt).fromNow(),
+          Thumbnail: element.coverImage.large
         });
         return;
       }
@@ -147,6 +151,9 @@ function getNextEpisode(anime, message, dm = false) {
         const responseMessage = {
           embed: {
             color: 16408534,
+            thumbnail: {
+              url: element.Thumbnail,
+            },
             title: `***${element.AnimeName}***`,
             url: `https://myanimelist.net/anime/${element.MalId}/`,
             fields: [
@@ -228,6 +235,21 @@ function getNextEpisode(anime, message, dm = false) {
         sendMessage(responseMessage);
         return;
       }
+      let resultString = 'Result';
+      if (completedEntries.length != 1) resultString = 'Results'
+      var responseMessage = {
+        embed: {
+          color: 11652146,
+          title: `${resultString} for keyword ***${anime}***:`,
+          fields: [
+            {
+              name: `*${completedEntries.length} Anime*`,
+              value: `All of the found anime are finished.`
+            }
+          ]
+        }
+      };
+      sendMessage(responseMessage);
       const responseMessage = {
         embed: {
           color: 11652146,
