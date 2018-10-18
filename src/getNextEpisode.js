@@ -7,7 +7,9 @@ function getNextEpisode(anime, message, dm = false) {
       media (id: $id, search: $search) {
         id
         title {
-          romaji
+          romaji,
+          english,
+          native
         }
         status
         episodes
@@ -28,11 +30,15 @@ function getNextEpisode(anime, message, dm = false) {
     const result = await endeavor.queryAnilist({ query, variables });
 
     var ongoingEntries = [];
+    var unknownUnreleasedEntries = [];
     var unreleasedEntries = [];
     var completedEntries = [];
     result.data.Page.media.forEach(element => {
       console.log(element);
       var _anime = element.title.romaji.toString();
+      if (element.title.english !== null) {
+        _anime = element.title.english.toString();
+      }
       var _time = "Unknown";
       var _episode = -1;
       if (element.nextAiringEpisode !== null) {
@@ -56,6 +62,15 @@ function getNextEpisode(anime, message, dm = false) {
           AnimeName: _anime,
           AnimeCountdown: countdown(_time),
           CurrentEpisode: _episode
+        });
+      } else if (
+        element.status === "NOT_YET_RELEASED" &&
+        element.nextAiringEpisode === null
+      ) {
+        unknownUnreleasedEntries.push({
+          AnimeName: _anime,
+          AnimeCountdown: null,
+          CurrentEpisode: null
         });
       } else if (
         element.status === "FINISHED" &&
@@ -93,6 +108,14 @@ function getNextEpisode(anime, message, dm = false) {
         }***"  is not yet aired. It will be aired in **${
           element.AnimeCountdown
         }!**`;
+        sendMessage(responseMessage);
+      }
+    } else if (unknownUnreleasedEntries.length > 0) {
+      for (let i = 0; i < unknownUnreleasedEntries.length; i++) {
+        const element = unknownUnreleasedEntries[i];
+        var responseMessage = `"***${
+          element.AnimeName
+        }***"  is not yet aired, and the release date is currently unknown.`;
         sendMessage(responseMessage);
       }
     } else if (completedEntries.length > 0) {
