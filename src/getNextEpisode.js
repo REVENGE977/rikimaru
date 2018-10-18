@@ -146,7 +146,7 @@ function getNextEpisode(anime, message, dm = false) {
           embed: {
             color: 16408534,
             thumbnail: {
-              url: element.Thumbnail,
+              url: element.Thumbnail
             },
             title: `***${element.AnimeName}***`,
             url: `https://myanimelist.net/anime/${element.MalId}/`,
@@ -168,6 +168,9 @@ function getNextEpisode(anime, message, dm = false) {
         var responseMessage = {
           embed: {
             color: 8646732,
+            thumbnail: {
+              url: element.Thumbnail
+            },
             title: `***${element.AnimeName}***`,
             url: `https://myanimelist.net/anime/${element.MalId}/`,
             fields: [
@@ -188,6 +191,9 @@ function getNextEpisode(anime, message, dm = false) {
         var responseMessage = {
           embed: {
             color: 6513633,
+            thumbnail: {
+              url: element.Thumbnail
+            },
             title: `***${element.AnimeName}***`,
             url: `https://myanimelist.net/anime/${element.MalId}/`,
             fields: [
@@ -208,6 +214,9 @@ function getNextEpisode(anime, message, dm = false) {
         var responseMessage = {
           embed: {
             color: 11652146,
+            thumbnail: {
+              url: element.Thumbnail
+            },
             title: `***${element.AnimeName}***   `,
             url: `https://myanimelist.net/anime/${element.MalId}/`,
             fields: [
@@ -222,8 +231,8 @@ function getNextEpisode(anime, message, dm = false) {
         };
         sendMessage(responseMessage);
       } else {
-        let resultString = 'Result';
-        if (completedEntries.length != 1) resultString = 'Results'
+        let resultString = "Result";
+        if (completedEntries.length != 1) resultString = "Results";
         var responseMessage = {
           embed: {
             color: 11652146,
