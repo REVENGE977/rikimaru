@@ -104,7 +104,8 @@ function getNextEpisode(anime, message, dm = false) {
           CurrentEpisode: _episode,
           EndDate: null,
           StartDate: null,
-          UpdatedAt: moment(_updatedAt).fromNow()
+          UpdatedAt: moment(_updatedAt).fromNow(),
+          Thumbnail: element.coverImage.large
         });
       } else if (
         element.status === "NOT_YET_RELEASED" &&
@@ -117,7 +118,8 @@ function getNextEpisode(anime, message, dm = false) {
           CurrentEpisode: null,
           EndDate: null,
           StartDate: null,
-          UpdatedAt: moment(_updatedAt).fromNow()
+          UpdatedAt: moment(_updatedAt).fromNow(),
+          Thumbnail: element.coverImage.large
         });
       } else if (
         element.status === "FINISHED" &&
@@ -130,7 +132,8 @@ function getNextEpisode(anime, message, dm = false) {
           CurrentEpisode: _episode,
           EndDate: _endDate,
           StartDate: _startDate,
-          UpdatedAt: moment(_updatedAt).fromNow()
+          UpdatedAt: moment(_updatedAt).fromNow(),
+          Thumbnail: element.coverImage.large
         });
       }
     });
