@@ -223,9 +223,7 @@ function getNextEpisode(anime, message, dm = false) {
         sendMessage(responseMessage);
       } else {
         let resultString = 'Result';
-        if (completedEntries.length != 1) {
-         resultString = 'Results'
-        }
+        if (completedEntries.length != 1) resultString = 'Results'
         var responseMessage = {
           embed: {
             color: 11652146,
