@@ -233,7 +233,7 @@ function getNextEpisode(anime, message, dm = false) {
             fields: [
               {
                 name: `*${completedEntries.length} Anime*`,
-                value: `All of them is already completed.`
+                value: `All of the found anime are finished.`
               }
             ]
           }
